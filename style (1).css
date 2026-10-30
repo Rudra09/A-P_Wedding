@@ -2056,6 +2056,7 @@ footer .hashtag {
     color: #666;
     font-size: 0.85rem;
     margin-bottom: 16px;
+    font-weight: bold;
 }
 
 /* Viewfinder Box */
@@ -2191,7 +2192,7 @@ footer .hashtag {
     margin-top: 12px;
     font-size: 0.82rem;
     color: #8b1d28;
-    font-weight: 500;
+    font-weight: bold;
 }
 
 /* Default view for larger screens: everything stays on one line */
@@ -2238,3 +2239,4 @@ footer .hashtag {
 .default-photo-element {
     filter: contrast(1.1) brightness(1.05) saturate(1.15) drop-shadow(0 0 8px rgba(255, 215, 0, 0.4));
 }
+
