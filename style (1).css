@@ -2237,6 +2237,13 @@ footer .hashtag {
 #webcamVideo,
 #uploadedImgPreview,
 .default-photo-element {
-    filter: contrast(1.1) brightness(1.05) saturate(1.15) drop-shadow(0 0 8px rgba(255, 215, 0, 0.4));
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Soft smooth blur combined with bright wedding styling */
+    filter: brightness(1.08) contrast(1.05) saturate(1.15)  drop-shadow(0 0 8px rgba(255, 215, 0, 0.3));
 }
 

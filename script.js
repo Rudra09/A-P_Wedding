@@ -712,13 +712,14 @@ function captureAndDownload() {
     const ctx = canvas.getContext('2d');
     const statusDiv = document.getElementById('statusMessage');
 
-    canvas.width = 1200;
-    canvas.height = 1200;
+    canvas.width = 1920;
+    canvas.height = 1920;
     const w = canvas.width;
     const h = canvas.height;
 
-    // Automatically apply enhancement filter to canvas rendering
-    ctx.filter = 'contrast(1.1) brightness(1.05) saturate(1.15)';
+    
+    // Adds a creamy, smooth skin finish combined with studio brightness and rich wedding tones
+ctx.filter = 'brightness(1.08) contrast(1.05) saturate(1.15) ';
 
     // 1. Draw User Image (Camera feed, Uploaded photo, or Default couple photo fallback)
     if (activeSource === 'camera' && isCameraActive) {
