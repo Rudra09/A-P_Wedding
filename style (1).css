@@ -1855,6 +1855,20 @@ footer .hashtag {
     z-index: 2;
     margin: 0 5px;
 } */
+ .couple-alignment-container, .varmala-flex-row {
+    display: flex;
+    align-items: center;    /* This vertically centers Abhishek, Mandap, and Priya perfectly */
+    justify-content: center;
+    gap: 40px;              /* Adjust spacing between elements */
+}
+
+/* Ensure individual person items maintain equal layout bounds */
+.person-card, .groom-box, .bride-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
 
 /* --- MOBILE RESPONSIVE OPTIMIZATIONS (Screens under 576px) --- */
 @media (max-width: 576px) {
@@ -1916,6 +1930,7 @@ footer .hashtag {
         font-size: 0.95rem !important;
     }
 }
+
 /* Rose Petal Shower Animation */
 .petal-container {
     position: absolute;
@@ -2032,7 +2047,7 @@ footer .hashtag {
     border: 2px solid #d4af37;
     border-radius: 20px;
     max-width: 580px;
-    width: 100%;
+    width: 95%;
     padding: 22px 18px;
     text-align: center;
     box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(212, 175, 55, 0.25);
@@ -2248,3 +2263,98 @@ footer .hashtag {
     filter: brightness(1.08) contrast(1.05) saturate(1.15)  drop-shadow(0 0 8px rgba(255, 215, 0, 0.3));
 }
 
+/* Container styling for the watermark badge */
+.creator-watermark-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 22px;
+    margin: 25px auto;
+    background: linear-gradient(135deg, rgba(20, 19, 22, 0.92), rgba(44, 43, 48, 0.95));
+    border: 1.5px solid #d4af37;
+    border-radius: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 12px rgba(212, 175, 55, 0.25);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.92rem;
+    color: #e0e0e0;
+    letter-spacing: 0.8px;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: all 0.4s ease;
+}
+
+/* Metallic gold shining text styling for RK DEEPAK */
+.creator-name {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 0.98rem;
+    letter-spacing: 1.5px;
+    background: linear-gradient(
+        110deg, 
+        #d4af37 0%, 
+        #ffd700 25%, 
+        #ffffff 50%, 
+        #ffd700 75%, 
+        #d4af37 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: goldShine 3.5s linear infinite;
+    text-transform: uppercase;
+}
+
+/* Moving light streak across the badge background */
+.creator-watermark-badge::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        60deg,
+        transparent 30%,
+        rgba(255, 215, 0, 0.18) 50%,
+        transparent 70%
+    );
+    transform: rotate(30deg);
+    animation: backgroundGleam 4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* Sparkle icon subtle scaling animation */
+.watermark-icon {
+    font-size: 0.95rem;
+    filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6));
+    animation: sparklePulse 2s ease-in-out infinite alternate;
+}
+
+/* Hover effect */
+.creator-watermark-badge:hover {
+    transform: translateY(-2px);
+    border-color: #ffd700;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+/* --- Keyframe Animations --- */
+
+/* Text metallic gradient motion */
+@keyframes goldShine {
+    0% { background-position: 200% center; }
+    100% { background-position: -200% center; }
+}
+
+/* Diagonal light sheen effect */
+@keyframes backgroundGleam {
+    0% { transform: translateX(-100%) rotate(30deg); }
+    100% { transform: translateX(100%) rotate(30deg); }
+}
+
+/* Sparkle glow pulse */
+@keyframes sparklePulse {
+    0% { opacity: 0.5; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1.15); }
+}

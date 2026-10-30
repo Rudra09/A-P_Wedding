@@ -515,28 +515,7 @@ function nextPheraStep() {
 
     // When the page first loads, if currentPhera is 0, we are currently viewing Step 1. 
     // Clicking the button now should move us to Step 2 (index 1).
-    if (currentPhera < 6) {
-        // currentPhera++; // Advance index first (e.g., from 0 to 1 for 2nd phera)
-        // const stepData = realPherasData[currentPhera];
-        // const activePheraNum = currentPhera + 1; // 2 through 7
-
-        // // Move couple closer step by step
-        // const moveOffset = activePheraNum * 15;
-        // groom.style.transform = `translateX(${moveOffset}px)`;
-        // bride.style.transform = `translateX(-${moveOffset}px)`;
-
-        // // Make the floating garland pulse / scale up slightly
-        // garland.style.transform = `scale(${1 + (activePheraNum * 0.05)})`;
-
-        // // Update Progress Bar accurately
-        // const progressPercent = (activePheraNum / 7) * 100;
-        // fill.style.width = `${progressPercent}%`;
-
-        // // Update Text
-        // badge.innerText = `SACRED PHERA ${activePheraNum} OF 7`;
-        // title.innerText = stepData.title;
-        // vow.innerText = `"${stepData.vow}"`;
-        // btn.innerText = stepData.btnText;
+    
         if (currentPhera < 6) {
         currentPhera++; 
         const stepData = realPherasData[currentPhera];
@@ -563,7 +542,7 @@ function nextPheraStep() {
         vow.innerText = `"${stepData.vow}"`;
         btn.innerText = stepData.btnText;
 
-    }
+    
 
     } else if (currentPhera === 6) {
         // FINAL 7th PHERA REACHED -> Hide Havan arena & show final couple picture with celebration
@@ -712,43 +691,83 @@ function captureAndDownload() {
     const ctx = canvas.getContext('2d');
     const statusDiv = document.getElementById('statusMessage');
 
+    // High-definition square resolution
     canvas.width = 1920;
     canvas.height = 1920;
     const w = canvas.width;
     const h = canvas.height;
 
-    
-    // Adds a creamy, smooth skin finish combined with studio brightness and rich wedding tones
-ctx.filter = 'brightness(1.08) contrast(1.05) saturate(1.15) ';
+    // 1. Professional Studio Filter (Enhanced richness & clarity)
+    ctx.filter = 'brightness(1.15) contrast(1.10) saturate(1.00)';
 
-    // 1. Draw User Image (Camera feed, Uploaded photo, or Default couple photo fallback)
+    // Robust Cover Math (Prevents stretching & keeps correct proportions)
+    function drawCover(mediaElement, isVideo = false, isMirrored = false) {
+        if (!mediaElement) return;
+
+        const imgWidth = isVideo ? (mediaElement.videoWidth || 1280) : (mediaElement.naturalWidth || mediaElement.width || 1280);
+        const imgHeight = isVideo ? (mediaElement.videoHeight || 720) : (mediaElement.naturalHeight || mediaElement.height || 720);
+
+        const imgRatio = imgWidth / imgHeight;
+        let renderWidth = w;
+        let renderHeight = h;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        if (imgRatio > 1) {
+            renderHeight = h;
+            renderWidth = h * imgRatio;
+            offsetX = (w - renderWidth) / 2;
+        } else {
+            renderWidth = w;
+            renderHeight = w / imgRatio;
+            offsetY = (h - renderHeight) / 2;
+        }
+
+        ctx.save();
+        if (isMirrored) {
+            ctx.translate(w, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(mediaElement, offsetX, offsetY, renderWidth, renderHeight);
+        } else {
+            ctx.drawImage(mediaElement, offsetX, offsetY, renderWidth, renderHeight);
+        }
+        ctx.restore();
+    }
+
+    // 2. Draw User Image (Camera, Upload, or Default Photo)
     if (activeSource === 'camera' && isCameraActive) {
         const video = document.getElementById('webcamVideo');
-        ctx.save();
-        ctx.translate(w, 0);
-        ctx.scale(-1, 1);
-        ctx.drawImage(video, 0, 0, w, h);
-        ctx.restore();
+        drawCover(video, true, true);
     } else if (activeSource === 'upload' && uploadedImageObj.src) {
-        ctx.drawImage(uploadedImageObj, 0, 0, w, h);
+        drawCover(uploadedImageObj, false, false);
     } else {
         const defaultCoupleImg = document.getElementById('defaultCoupleImg');
         if (defaultCoupleImg) {
-            ctx.drawImage(defaultCoupleImg, 0, 0, w, h);
+            drawCover(defaultCoupleImg, false, false);
         }
     }
 
-    // Reset filter so it doesn't affect the crisp prop frame overlay
+    // 3. Apply Soft-Focus Glamour Glow (Gives that smooth, premium skin texture look)
+    ctx.filter = 'blur(12px) brightness(1.05)';
+    ctx.globalAlpha = 0.12; // Subtle blending so it stays natural, not blurry
+    if (activeSource === 'camera' && isCameraActive) {
+        ctx.drawImage(document.getElementById('webcamVideo'), 0, 0, w, h);
+    } else if (activeSource === 'upload' && uploadedImageObj.src) {
+        ctx.drawImage(uploadedImageObj, 0, 0, w, h);
+    }
+
+    // Reset alpha and filter for the crisp frame overlay
+    ctx.globalAlpha = 1.0;
     ctx.filter = 'none';
 
-    // 2. Draw the already-loaded prop overlay element directly from the DOM
+    // 4. Draw the Royal Prop Frame Overlay on top
     const propElement = document.getElementById('propOverlayImg');
     if (propElement) {
         ctx.drawImage(propElement, 0, 0, w, h);
     }
 
-    // 3. Trigger Download Immediately
-    const dataURL = canvas.toDataURL('image/png');
+    // 5. Trigger High-Res Download
+    const dataURL = canvas.toDataURL('image/png', 1.0);
     const downloadLink = document.createElement('a');
     downloadLink.download = 'Abhishek_Priya_Wedding_Memory.png';
     downloadLink.href = dataURL;
@@ -757,10 +776,8 @@ ctx.filter = 'brightness(1.08) contrast(1.05) saturate(1.15) ';
     document.body.removeChild(downloadLink);
 
     statusDiv.style.color = '#27ae60';
-    statusDiv.textContent = "Photo downloaded successfully!";
+    statusDiv.textContent = "High-resolution royal photo downloaded successfully!";
 }
-
-
 // Hide preloader seamlessly once the page and assets load
 window.addEventListener('load', function() {
     const preloader = document.getElementById('pagePreloader');
