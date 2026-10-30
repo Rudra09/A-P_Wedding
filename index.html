@@ -11,6 +11,69 @@
 </head>
 <body>
 
+    <!-- Royal Loading Screen -->
+<!-- Royal Loading Screen (Golden & Silver Theme) -->
+<!-- Royal Loading Screen (Golden & Silver Theme with Floating Sparkles) -->
+<!-- Royal Loading Screen (Animated Metallic Gold & Silver Theme) -->
+<div id="pagePreloader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #2c2b30 0%, #151417 60%, #0a090b 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.5s ease; color: #f5f5f7; text-align: center; padding: 20px; overflow: hidden;">
+    
+    <!-- Animated Glowing Background Pulse Effect -->
+    <div style="position: absolute; width: 320px; height: 320px; background: radial-gradient(circle, rgba(212,175,55,0.18) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; animation: bgPulse 3s infinite ease-in-out; z-index: 1;"></div>
+
+    <!-- Background Floating Particles -->
+    <div class="royal-particle" style="top: 10%; left: 20%; animation-duration: 4s; animation-delay: 0s;">✨</div>
+    <div class="royal-particle" style="top: 80%; left: 75%; animation-duration: 5s; animation-delay: 1s;">🌟</div>
+    <div class="royal-particle" style="top: 30%; left: 85%; animation-duration: 6s; animation-delay: 2s;">✨</div>
+    <div class="royal-particle" style="top: 70%; left: 15%; animation-duration: 4.5s; animation-delay: 1.5s;">🌟</div>
+    <div class="royal-particle" style="top: 15%; left: 60%; animation-duration: 5.5s; animation-delay: 0.5s;">✨</div>
+    <div class="royal-particle" style="top: 55%; left: 35%; animation-duration: 5.5s; animation-delay: 1.2s;">✨</div>
+    <div class="royal-particle" style="top: 85%; left: 35%; animation-duration: 4.8s; animation-delay: 0.8s;">🌟</div>
+
+    <!-- Content -->
+    <div style="font-size: 3rem; margin-bottom: 15px; animation: pulse 1.5s infinite; filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5)); z-index: 2;">🤴💖👸</div>
+    
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 8px; background: linear-gradient(135deg, #ffd700, #ffffff, #d4af37); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; z-index: 2;">Abhishek & Priya's Wedding</h2>
+    
+    <p style="font-family: 'Poppins', sans-serif; font-size: 0.95rem; color: #c0c0c0; letter-spacing: 1.5px; margin-bottom: 25px; text-transform: uppercase; z-index: 2;">Preparing Your Royal Experience...</p>
+    
+    <!-- Shimmering Gold & Silver Spinner -->
+    <div style="width: 45px; height: 45px; border: 4px solid rgba(192, 192, 192, 0.2); border-top: 4px solid #ffd700; border-right: 4px solid #e0e0e0; border-radius: 50%; animation: spin 1s linear infinite; box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); z-index: 2;"></div>
+</div>
+
+<style>
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+@keyframes bgPulse {
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50% { transform: scale(1.35); opacity: 0.85; }
+}
+
+/* Floating Sparkle Animation */
+.royal-particle {
+    position: absolute;
+    font-size: 1.2rem;
+    opacity: 0.6;
+    animation: floatParticle infinite ease-in-out;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes floatParticle {
+    0% {
+        transform: translateY(0px) scale(0.8);
+        opacity: 0.2;
+    }
+    50% {
+        transform: translateY(-25px) scale(1.2);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(0px) scale(0.8);
+        opacity: 0.2;
+    }
+}
+</style>
     <!--AUDIO TAG-->
     <audio id="weddingAudio"  loop preload="none">
     <source src="assets/sahilmadan-wedding-invitation-421393.mp3" type="audio/mpeg">

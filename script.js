@@ -759,3 +759,15 @@ ctx.filter = 'brightness(1.08) contrast(1.05) saturate(1.15) ';
     statusDiv.style.color = '#27ae60';
     statusDiv.textContent = "Photo downloaded successfully!";
 }
+
+
+// Hide preloader seamlessly once the page and assets load
+window.addEventListener('load', function() {
+    const preloader = document.getElementById('pagePreloader');
+    if (preloader) {
+        preloader.style.opacity = '0';
+        setTimeout(() => {
+            preloader.style.display = 'none';
+        }, 500); // Matches the 0.5s transition time
+    }
+});
