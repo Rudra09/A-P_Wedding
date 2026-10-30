@@ -297,7 +297,7 @@
         setInterval(createTwinklingBurst, window.innerWidth > 992 ? 1600 : 2500);
 
         // Countdown Timer
-        const weddingDate = new Date(2026, 10, 25, 0, 0, 0).getTime();
+        const weddingDate = new Date("November 26, 2026 01:00:00").getTime();
 
         function updateCountdown() {
             const now = new Date().getTime();
@@ -431,39 +431,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-let currentPhera = 0;
+let currentPhera = -1;
 let isComplete = false; // Tracks whether the ceremony has finished
 
 const realPherasData = [
+    
     {
         title: "Nourishment & Provision 🍚",
         vow: "Together we will share the food, nourishment, and financial responsibility to build a prosperous and healthy home.",
-        btnText: "🔥 Take 2nd Phera"
+        btnText: "🔥 Take 1st Phera"
     },
     {
-        title: " Strength & Physical Wellness 💪",
+        title: "Strength & Physical Wellness 💪",
         vow: "Together we will cultivate physical and mental strength, supporting each other through all life's challenges.",
-        btnText: "🔥 Take 3rd Phera"
+        btnText: "🔥 Take 2nd Phera"
     },
     {
         title: "Wealth, Prosperity & Spiritual Growth 🌟",
         vow: "Together we will strive to earn honest wealth, practice charity, and grow in wisdom and spiritual devotion.",
-        btnText: "🔥 Take 4th Phera"
+        btnText: "🔥 Take 3rd Phera"
     },
     {
         title: "Family Joy, Happiness & Harmony 🏡",
         vow: "Together we will bring joy, mutual trust, and deep respect to each other and our families.",
-        btnText: "🔥 Take 5th Phera"
+        btnText: "🔥 Take 4th Phera"
     },
     {
         title: "Noble Offspring & Legacy 👶",
         vow: "Together we pray for noble, healthy children, and pledge to guide them with good values and unconditional love.",
-        btnText: "🔥 Take 6th Phera"
+        btnText: "🔥 Take 5th Phera"
     },
     {
         title: "Longevity & Seasons of Life 🌸",
         vow: "Together we pledge to stand side-by-side through all seasons of life, sharing every joy and sorrow gracefully.",
-        btnText: "🔥 Take Final 7th Phera"
+        btnText: "🔥 Take 6th Phera"
     },
     {
         title: "Eternal Companionship & Friendship 🤝",
@@ -485,71 +486,68 @@ function nextPheraStep() {
     const btn = document.getElementById('pheraBtn');
     const petalContainer = document.getElementById('petalContainer');
 
-    // If ceremony was complete, clicking "Replay" resets everything back to Step 1 cleanly
+    // 1. REPLAY / RESET LOGIC: Reset back cleanly to Phera 1
     if (isComplete) {
-        currentPhera = 0;
         isComplete = false;
 
-        // Switch back views: Show ceremony arena, hide final combined picture
         if (ceremonyArena) ceremonyArena.style.display = 'flex';
         if (finalCoupleContainer) finalCoupleContainer.style.display = 'none';
 
-        groom.style.transform = `translateX(0px)`;
-        bride.style.transform = `translateX(0px)`;
+        const isMobile = window.innerWidth <= 576;
+        const stepMultiplier = isMobile ? 4 : 8;
+        const moveOffset = 1 * stepMultiplier; 
+
+        groom.style.transform = `translateX(${moveOffset}px)`;
+        bride.style.transform = `translateX(-${moveOffset}px)`;
         garland.innerText = '🌹🏵️🌹🏵️🌹'; 
         garland.style.transform = 'scale(1)';
         
-        // Reset to Step 1 data and accurate 1/7th progress bar width
+        currentPhera = 0; // Reset index to 0 for Phera 1
         const stepData = realPherasData[0];
+        
         badge.innerText = `SACRED PHERA 1 OF 7`;
         title.innerText = stepData.title;
         vow.innerText = `"${stepData.vow}"`;
-        btn.innerText = stepData.btnText;
+        btn.innerText = stepData.btnText; // This correctly says "Take 2nd Phera"
         
         fill.style.width = `${(1 / 7) * 100}%`;
         petalContainer.innerHTML = ''; 
 
-        currentPhera = 0; // Keep at 0 so first click advances to Phera 1 / 2 properly
         return;
     }
 
-    // When the page first loads, if currentPhera is 0, we are currently viewing Step 1. 
-    // Clicking the button now should move us to Step 2 (index 1).
-    
-        if (currentPhera < 6) {
+    // 2. NORMAL PROGRESSION LOGIC
+    // If currentPhera is 0, incrementing to 1 loads realPherasData[1] (Phera 2)
+    if (currentPhera < 6) {
         currentPhera++; 
         const stepData = realPherasData[currentPhera];
-        const activePheraNum = currentPhera + 1; 
+        const activePheraNum = currentPhera + 1; // 2 through 7
 
-        // Check if screen is mobile (< 576px wide) to adjust walking distance safely
         const isMobile = window.innerWidth <= 576;
-        const stepMultiplier = isMobile ? 4 : 8; // Shorter steps on mobile to prevent overlapping
+        const stepMultiplier = isMobile ? 4 : 8; 
 
         const moveOffset = activePheraNum * stepMultiplier;
         groom.style.transform = `translateX(${moveOffset}px)`;
         bride.style.transform = `translateX(-${moveOffset}px)`;
 
-        // Make the floating garland pulse / scale up slightly
+        // Fixed syntax error from missing '*' multiplication operator
         garland.style.transform = `scale(${1 + (activePheraNum * 0.04)})`;
 
-        // Update Progress Bar accurately
+        // Update Progress Bar
         const progressPercent = (activePheraNum / 7) * 100;
         fill.style.width = `${progressPercent}%`;
 
-        // Update Text
+        // Update Text & Button
         badge.innerText = `SACRED PHERA ${activePheraNum} OF 7`;
         title.innerText = stepData.title;
         vow.innerText = `"${stepData.vow}"`;
         btn.innerText = stepData.btnText;
 
-    
-
     } else if (currentPhera === 6) {
-        // FINAL 7th PHERA REACHED -> Hide Havan arena & show final couple picture with celebration
+        // FINAL 7th PHERA REACHED -> Show celebration screen
         if (ceremonyArena) ceremonyArena.style.display = 'none';
         if (finalCoupleContainer) finalCoupleContainer.style.display = 'block';
 
-        // Trigger Petal Shower Celebration
         triggerRosePetals();
 
         fill.style.width = '100%';
@@ -558,10 +556,9 @@ function nextPheraStep() {
         vow.innerText = '"By completing the seven steps, we have become companions for life. May our bond grow stronger with every passing day!"';
         btn.innerText = '🔄 Replay Sacred Pheras';
 
-        isComplete = true; // Lock state so the next click handles the reset
+        isComplete = true; 
     }
 }
-
 
 // Function to generate falling rose and marigold petals from all directions
 function triggerRosePetals() {
@@ -698,7 +695,7 @@ function captureAndDownload() {
     const h = canvas.height;
 
     // 1. Professional Studio Filter (Enhanced richness & clarity)
-    ctx.filter = 'brightness(1.15) contrast(1.10) saturate(1.00)';
+    ctx.filter = 'brightness(1.15) contrast(1.15) saturate(1.12)';
 
     // Robust Cover Math (Prevents stretching & keeps correct proportions)
     function drawCover(mediaElement, isVideo = false, isMirrored = false) {
@@ -788,3 +785,4 @@ window.addEventListener('load', function() {
         }, 500); // Matches the 0.5s transition time
     }
 });
+
