@@ -2193,3 +2193,48 @@ footer .hashtag {
     color: #8b1d28;
     font-weight: 500;
 }
+
+/* Default view for larger screens: everything stays on one line */
+.venue-date-badge {
+    flex-wrap: nowrap;
+}
+
+.date-text {
+    display: inline;
+}
+
+/* Mobile view below 500px: shifts the date to a new line and wraps the badge naturally */
+/* By default (Desktop > 500px): show single-line badge, hide mobile-split elements */
+.mobile-venue, .mobile-date {
+    display: none;
+}
+.desktop-venue {
+    display: inline;
+}
+
+/* Mobile view (< 500px): hide single-line badge, show stacked mobile elements */
+@media (max-width: 500px) {
+    .venue-date-badge {
+        flex-direction: column;
+        line-height: 1.5;
+        padding: 10px 15px !important;
+    }
+
+    .desktop-venue {
+        display: none;
+    }
+
+    .mobile-venue {
+        display: inline;
+    }
+
+    .mobile-date {
+        display: block;
+        margin-top: 2px;
+    }
+}
+#webcamVideo,
+#uploadedImgPreview,
+.default-photo-element {
+    filter: contrast(1.1) brightness(1.05) saturate(1.15) drop-shadow(0 0 8px rgba(255, 215, 0, 0.4));
+}

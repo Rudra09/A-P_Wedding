@@ -616,13 +616,14 @@ async function requestCameraPermission() {
     const overlay = document.getElementById('permissionOverlay');
     const video = document.getElementById('webcamVideo');
     const uploadedImg = document.getElementById('uploadedImgPreview');
+    const defaultCoupleImg = document.getElementById('defaultCoupleImg');
     const toggleBtn = document.getElementById('toggleCamBtn');
 
     statusDiv.textContent = "Requesting camera permission...";
 
     try {
         currentStream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }, 
+            video: { facingMode: 'user', width: { ideal: 1920 }, height: { ideal: 1080 } }, 
             audio: false 
         });
 
@@ -630,9 +631,10 @@ async function requestCameraPermission() {
         activeSource = 'camera';
         isCameraActive = true;
         
+        if (defaultCoupleImg) defaultCoupleImg.style.display = 'none';
         uploadedImg.style.display = 'none';
         video.style.display = 'block';
-        overlay.style.display = 'none';
+        if (overlay) overlay.style.display = 'none';
         toggleBtn.textContent = "📹 Turn Camera Off";
 
         statusDiv.style.color = '#27ae60';
@@ -646,6 +648,7 @@ async function requestCameraPermission() {
 
 function toggleCamera() {
     const video = document.getElementById('webcamVideo');
+    const defaultCoupleImg = document.getElementById('defaultCoupleImg');
     const toggleBtn = document.getElementById('toggleCamBtn');
     const statusDiv = document.getElementById('statusMessage');
 
@@ -655,6 +658,11 @@ function toggleCamera() {
         }
         video.srcObject = null;
         isCameraActive = false;
+        
+        // Show default couple photo when camera is turned off
+        if (defaultCoupleImg) defaultCoupleImg.style.display = 'block';
+        video.style.display = 'none';
+
         toggleBtn.textContent = "📹 Turn Camera On";
         statusDiv.style.color = '#c0392b';
         statusDiv.textContent = "Camera is turned off.";
@@ -667,6 +675,7 @@ function handleFileUpload(event) {
     const file = event.target.files[0];
     const statusDiv = document.getElementById('statusMessage');
     const toggleBtn = document.getElementById('toggleCamBtn');
+    const defaultCoupleImg = document.getElementById('defaultCoupleImg');
     
     if (file) {
         if (isCameraActive && currentStream) {
@@ -681,8 +690,10 @@ function handleFileUpload(event) {
             uploadedImageObj.onload = function() {
                 activeSource = 'upload';
                 
+                if (defaultCoupleImg) defaultCoupleImg.style.display = 'none';
                 document.getElementById('webcamVideo').style.display = 'none';
-                document.getElementById('permissionOverlay').style.display = 'none';
+                const overlay = document.getElementById('permissionOverlay');
+                if (overlay) overlay.style.display = 'none';
                 
                 const preview = document.getElementById('uploadedImgPreview');
                 preview.src = e.target.result;
@@ -701,30 +712,33 @@ function captureAndDownload() {
     const ctx = canvas.getContext('2d');
     const statusDiv = document.getElementById('statusMessage');
 
-    canvas.width = 900;
-    canvas.height = 900;
+    canvas.width = 1200;
+    canvas.height = 1200;
     const w = canvas.width;
     const h = canvas.height;
 
-    // 1. Draw User Image (Camera feed or Uploaded photo)
-    if (activeSource === 'camera') {
+    // Automatically apply enhancement filter to canvas rendering
+    ctx.filter = 'contrast(1.1) brightness(1.05) saturate(1.15)';
+
+    // 1. Draw User Image (Camera feed, Uploaded photo, or Default couple photo fallback)
+    if (activeSource === 'camera' && isCameraActive) {
         const video = document.getElementById('webcamVideo');
-        if (!isCameraActive || !video.srcObject) {
-            alert("Please turn on your camera or upload a photo first!");
-            return;
-        }
         ctx.save();
         ctx.translate(w, 0);
         ctx.scale(-1, 1);
         ctx.drawImage(video, 0, 0, w, h);
         ctx.restore();
-    } else {
-        if (!uploadedImageObj.src) {
-            alert("Please turn on your camera or upload a photo first!");
-            return;
-        }
+    } else if (activeSource === 'upload' && uploadedImageObj.src) {
         ctx.drawImage(uploadedImageObj, 0, 0, w, h);
+    } else {
+        const defaultCoupleImg = document.getElementById('defaultCoupleImg');
+        if (defaultCoupleImg) {
+            ctx.drawImage(defaultCoupleImg, 0, 0, w, h);
+        }
     }
+
+    // Reset filter so it doesn't affect the crisp prop frame overlay
+    ctx.filter = 'none';
 
     // 2. Draw the already-loaded prop overlay element directly from the DOM
     const propElement = document.getElementById('propOverlayImg');
