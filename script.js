@@ -126,27 +126,27 @@
         const countdownPetalsContainer = document.getElementById('countdownPetalsContainer');
         createFallingPetals(countdownPetalsContainer, petalCount);
 
-        // Helper to populate floating items in specific sections
-        function populateSectionDecor(containerId) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            const items = ['🌸', '💛', '🤍', '✨', '🫧', '💖'];
-            const colors = ['#ffd700', '#e0e0e0', '#ffffff', '#f3e5ab', '#ffea79'];
+        // // Helper to populate floating items in specific sections
+        // function populateSectionDecor(containerId) {
+        //     const container = document.getElementById(containerId);
+        //     if (!container) return;
+        //     const items = ['🌸', '💛', '🤍', '✨', '🫧', '💖'];
+        //     const colors = ['#ffd700', '#e0e0e0', '#ffffff', '#f3e5ab', '#ffea79'];
             
-            const count = window.innerWidth > 992 ? 28 : 14;
+        //     const count = window.innerWidth > 992 ? 28 : 14;
 
-            for (let i = 0; i < count; i++) {
-                const el = document.createElement('div');
-                el.classList.add('decor-item');
-                el.innerText = items[Math.floor(Math.random() * items.length)];
-                el.style.left = `${Math.random() * 95}vw`;
-                el.style.color = colors[Math.floor(Math.random() * colors.length)];
-                el.style.fontSize = `${Math.random() * 1.0 + 1.0}rem`;
-                el.style.animationDuration = `${Math.random() * 6 + 8}s`;
-                el.style.animationDelay = `${Math.random() * 6}s`;
-                container.appendChild(el);
-            }
-        }
+        //     for (let i = 0; i < count; i++) {
+        //         const el = document.createElement('div');
+        //         el.classList.add('decor-item');
+        //         el.innerText = items[Math.floor(Math.random() * items.length)];
+        //         el.style.left = `${Math.random() * 95}vw`;
+        //         el.style.color = colors[Math.floor(Math.random() * colors.length)];
+        //         el.style.fontSize = `${Math.random() * 1.0 + 1.0}rem`;
+        //         el.style.animationDuration = `${Math.random() * 6 + 8}s`;
+        //         el.style.animationDelay = `${Math.random() * 6}s`;
+        //         container.appendChild(el);
+        //     }
+        // }
 
         // familyDecorContainer deprecated, using familyPetalsContainer
 
@@ -164,7 +164,7 @@
             bubble.style.height = `${size}px`;
             bubble.style.left = `${Math.random() * 100}vw`;
             bubble.style.animationDuration = `${Math.random() * 8 + 14}s`;
-            bubble.style.animationDelay = `${Math.random() * 6}s`;
+            bubble.style.animationDelay = `${Math.random() * 5}s`;
             bubblesContainer.appendChild(bubble);
         }
 
@@ -786,3 +786,142 @@ window.addEventListener('load', function() {
     }
 });
 
+
+
+// Helper function to create and append a single heart with smooth movement
+function initVowsFloatingHearts() {
+    const container = document.getElementById('vowsFloatingContainer');
+    if (!container) return;
+
+    container.innerHTML = '';
+    const heartCount = window.innerWidth > 992 ? 22 : 14;
+
+    for (let i = 0; i < heartCount; i++) {
+        createSingleVowHeart(container);
+    }
+}
+
+// Helper function to create and append a single heart with smooth multi-directional movement
+function createSingleVowHeart(container) {
+    const heart = document.createElement('div');
+    heart.className = 'floating-vow-heart';
+    
+    // 50/50 Mix of Gold (💛) and Silver (🤍) hearts
+    heart.innerText = Math.random() > 0.5 ? '💛' : '🤍';
+
+    // Consistent heart sizing for both desktop and mobile
+    const randomSize = Math.random() * 0.8 + 1.8; 
+    heart.style.fontSize = `${randomSize}rem`;
+
+    // Random positioning across the section (scatters them uniformly from top to bottom)
+    heart.style.left = `${Math.random() * 90 + 5}%`;
+    heart.style.top = `${Math.random() * 85 + 5}%`;
+    
+    // Multi-directional drift path values (same as desktop)
+    heart.style.setProperty('--moveX1', `${(Math.random() - 0.5) * 180}px`);
+    heart.style.setProperty('--moveY1', `${(Math.random() - 0.5) * 180}px`);
+    heart.style.setProperty('--moveX2', `${(Math.random() - 0.5) * 240}px`);
+    heart.style.setProperty('--moveY2', `${(Math.random() - 0.5) * 240}px`);
+    heart.style.setProperty('--moveX3', `${(Math.random() - 0.5) * 300}px`);
+    heart.style.setProperty('--moveY3', `${(Math.random() - 0.5) * 300}px`);
+
+    heart.style.animationDuration = `${Math.random() * 6 + 8}s`;
+    heart.style.animationDelay = `${Math.random() * 4}s`;
+
+    // Click or touch event: bursts 1 heart, triggers the unified message, and spawns 2 new hearts instantly!
+  heart.addEventListener('click', (e) => {
+        const rect = container.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+
+        burstVowHeartAt(container, clickX, clickY);
+        heart.remove();
+
+        // Spawn BOTH replacement hearts at the exact same time
+        createSlowHeart(container);
+        createSlowHeart(container);
+    });
+
+    container.appendChild(heart);
+}
+
+function burstVowHeartAt(parentContainer, x, y) {
+    const congratsText = document.createElement('div');
+    congratsText.className = 'burst-congrats-text';
+    congratsText.innerHTML = `🎉 <strong style="color: #58181f; font-size: 1.05rem;">Congratulations!</strong> 🎉<br><span style="font-size: 0.95rem; font-weight: 600; color: #b8860b;">❤️ Abhishek & Priya ❤️</span>`;
+    congratsText.style.left = `${x}px`;
+    congratsText.style.top = `${y}px`;
+    parentContainer.appendChild(congratsText);
+
+    setTimeout(() => {
+        congratsText.remove();
+    }, 1200);
+
+    const symbols = ['✨', '💖', '💛', '🤍','❤️','💓','💗','💕'];
+    for (let i = 0; i < 16; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'heart-particle';
+        particle.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 110 + 40;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance;
+
+        particle.style.left = `${x}px`;
+        particle.style.top = `${y}px`;
+        particle.style.setProperty('--dx', `${dx}px`);
+        particle.style.setProperty('--dy', `${dy}px`);
+
+        parentContainer.appendChild(particle);
+
+        setTimeout(() => {
+            particle.remove();
+        }, 800);
+    }
+}
+
+// Initialize on load and resize
+window.addEventListener('DOMContentLoaded', initVowsFloatingHearts);
+window.addEventListener('resize', initVowsFloatingHearts);
+
+
+function createSlowHeart(container) {
+    const heart = document.createElement('div');
+    heart.className = 'floating-vow-heart spawning'; // Uses the slow fade-in class
+    
+    // 50/50 Mix of Gold (💛) and Silver (🤍) hearts
+    heart.innerText = Math.random() > 0.5 ? '💛' : '🤍';
+
+    const randomSize = Math.random() * 0.8 + 1.8; 
+    heart.style.fontSize = `${randomSize}rem`;
+
+    // Random positioning across the section
+    heart.style.left = `${Math.random() * 90 + 5}%`;
+    heart.style.top = `${Math.random() * 85 + 5}%`;
+    
+    // Multi-directional drift path values
+    heart.style.setProperty('--moveX1', `${(Math.random() - 0.5) * 180}px`);
+    heart.style.setProperty('--moveY1', `${(Math.random() - 0.5) * 180}px`);
+    heart.style.setProperty('--moveX2', `${(Math.random() - 0.5) * 240}px`);
+    heart.style.setProperty('--moveY2', `${(Math.random() - 0.5) * 240}px`);
+    heart.style.setProperty('--moveX3', `${(Math.random() - 0.5) * 300}px`);
+    heart.style.setProperty('--moveY3', `${(Math.random() - 0.5) * 300}px`);
+
+    heart.style.animationDuration = `1.2s, ${Math.random() * 6 + 8}s`;
+
+    // Click event for the new heart as well
+    heart.addEventListener('click', (e) => {
+        const rect = container.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+
+        burstVowHeartAt(container, clickX, clickY);
+        heart.remove();
+
+        createSlowHeart(container);
+        createSlowHeart(container);
+    });
+
+    container.appendChild(heart);
+}
